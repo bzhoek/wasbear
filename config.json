@@ -25,7 +25,13 @@
     "server": {
       "name": "server2",
       "application": {
-        "ear": "/vagrant/iwa-usermanagement-server-ear-13.4.0.1-SNAPSHOT.ear"
+        "ear": "/vagrant/iwa-usermanagement-server-ear-13.4.0.1-SNAPSHOT.ear",
+        "host": "default_host",
+        "resource": {
+          "reference": "jdbc/ics/userdataDB",
+          "type": "javax.sql.DataSource",
+          "jndiName": "jdbc/ics/userdataDB"
+        }
       }
     },
     "variable": {

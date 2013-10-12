@@ -1,0 +1,32 @@
+{
+  "node": {
+    "name": "precise64Node01",
+    "j2c": {
+      "name": "precise64Node01/db2inst1",
+      "userId": "db2inst1",
+      "password": "p@ssw0rd"
+    },
+    "jdbc": {
+      "name": "DB2JDBCProvider",
+      "classpath": "${DB2_JCC_DRIVER_PATH}/db2jcc.jar",
+      "implementationClassName": "com.ibm.db2.jcc.DB2ConnectionPoolDataSource",
+      "description": "description",
+      "dataSource": {
+        "name": "userDataSource",
+        "jndiName": "jdbc/ics/userdataDB",
+        "j2c": "precise64Node01/db2inst1",
+        "mapping": "DefaultPrincipalMapping",
+        "driverType": 4,
+        "databaseName": "ODS",
+        "serverName": "localhost",
+        "portNumber": "50000"
+      }
+    },
+    "server": {
+      "name": "server2",
+      "application": {
+        "ear": "/vagrant/iwa-usermanagement-server-ear-13.4.0.1-SNAPSHOT.ear"
+      }
+    }
+  }
+}

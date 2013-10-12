@@ -27,6 +27,10 @@
       "application": {
         "ear": "/vagrant/iwa-usermanagement-server-ear-13.4.0.1-SNAPSHOT.ear"
       }
+    },
+    "variable": {
+      "name": "DB2_JCC_DRIVER_PATH",
+      "value": "/opt/ibm/websphere/appserver/lib"
     }
   }
 }

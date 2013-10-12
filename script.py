@@ -73,10 +73,18 @@ def createCredential(param):
   print "NOTE: REQUIRES SERVER RESTART"
 
 
+def installApplication(param):
+  virtualHost = [['.*', '.*', param['host']]]
+  resource = param['resource']
+  dataSource = [['.*', '', '.*', resource['reference'], resource['type'], resource['jndiName'], '', '', '']]
+  AdminApp.install(param['ear'], ['-MapResRefToEJB', dataSource, '-MapWebModToVH', virtualHost])
+
+
 print dict['node']['name']
 
+installApplication(dict['node']['server']['application'])
 # createCredential(dict['node']['j2c'])
 # createVariable(dict['node']['variable'])
-createJdbcProvider(dict['node']['jdbc'])
+# createJdbcProvider(dict['node']['jdbc'])
 
 AdminConfig.save()

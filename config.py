@@ -19,7 +19,7 @@ binding = AdminConfig.getid('/Node:%s/Server:%s/StringNameSpaceBinding:%s' % (no
 
 # jdbcProvider
 providerName = 'DB2JDBCProvider'
-provider = AdminConfig.getid("%s/JDBCProvider/%s" % (nodeName, providerName))
+provider = AdminConfig.getid("/Node:%s/JDBCProvider/%s" % (nodeName, providerName))
 
 # jaas
 cellName = "precise64Node01Cell"

@@ -2,13 +2,13 @@
   "node": {
     "name": "precise64Node01",
     "j2c": {
-      "name": "precise64Node01/db2inst1",
-      "userId": "db2inst1",
+      "name": "db2inst1",
+      "username": "db2inst1",
       "password": "p@ssw0rd"
     },
     "jdbc": {
       "name": "DB2JDBCProvider",
-      "classpath": "${DB2_JCC_DRIVER_PATH}/db2jcc.jar",
+      "classpath": "${DB2UNIVERSAL_JDBC_DRIVER_PATH}/db2jcc.jar",
       "implementationClassName": "com.ibm.db2.jcc.DB2ConnectionPoolDataSource",
       "description": "description",
       "dataSource": {
@@ -29,7 +29,7 @@
       }
     },
     "variable": {
-      "name": "DB2_JCC_DRIVER_PATH",
+      "name": "DB2UNIVERSAL_JDBC_DRIVER_PATH",
       "value": "/opt/ibm/websphere/appserver/lib"
     }
   }

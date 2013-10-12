@@ -14,7 +14,8 @@ rep = AdminConfig.create('ResourceEnvironmentProvider', server, [['name', server
 rep = AdminConfig.getid('/Node:%s/Server:%s/ResourceEnvironmentProvider:%s' % (nodeName, serverName, serverName))
 
 # stringNameSpaceBinding
-AdminConfig.create('StringNameSpaceBinding', server, [['name', 'binding1'], ['nameInNameSpace', 'myBindings/myString'], ['stringToBind', "This is the String value that gets bound"]])
+AdminConfig.create('StringNameSpaceBinding', server, [['name', 'binding1'], ['nameInNameSpace', 'myBindings/myString'],
+  ['stringToBind', "This is the String value that gets bound"]])
 binding = AdminConfig.getid('/Node:%s/Server:%s/StringNameSpaceBinding:%s' % (nodeName, serverName, "binding1"))
 
 # jdbcProvider
@@ -25,4 +26,20 @@ provider = AdminConfig.getid("/Node:%s/JDBCProvider/%s" % (nodeName, providerNam
 cellName = "precise64Node01Cell"
 security = AdminConfig.getid("/Cell:%s/Security:/" % cellName)
 authAlias = "precise64Node01/db2inst1"
-AdminConfig.create('JAASAuthData', security,  [['alias', authAlias], ['userId', "db2inst1"], ['password', "p@ssw0rd"], ['description', '']])
+AdminConfig.create('JAASAuthData', security,
+  [['alias', authAlias], ['userId', "db2inst1"], ['password', "p@ssw0rd"], ['description', '']])
+
+# install
+print AdminApp.taskInfo('/vagrant/ics-ear-13.4.0-SNAPSHOT-nl.ear', 'MapResEnvRefToRes')
+AdminApp.install('/vagrant/iwa-usermanagement-server-ear-13.4.0.1-SNAPSHOT.ear', [
+  '-MapResRefToEJB', [[
+    'iwa-usermanagement-server',
+    '',
+    'iwa-usermanagement-server.war,WEB-INF/web.xml',
+    'jdbc/ics/userdataDB',
+    'javax.sql.DataSource',
+    'jdbc/ics/userdataDB',
+    '',
+    '',
+    '']],
+  '-MapWebModToVH', [['.*', '.*', 'default_host']]])

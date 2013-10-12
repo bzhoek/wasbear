@@ -7,5 +7,13 @@ wsadmin uses [Jython 2.1](http://pic.dhe.ibm.com/infocenter/wasinfo/v6r1/index.j
 
 Show required attributes with `print AdminConfig.required('ResourceEnvironmentProvider')`.
 
+# wsadmin
 
+`print AdminApp.taskInfo('/vagrant/ics-ear-13.4.0-SNAPSHOT-nl.ear', 'MapResEnvRefToRes')`
+
+AdminApp.install('/vagrant/iwa-usermanagement-server-ear-13.4.0.1-SNAPSHOT.ear')
+
+# links
+
+http://www.programmingforliving.com/2013/04/was85-application-deployment-using.html
 http://mattdowell.blogspot.nl/2008/06/scripting-websphere-61-configurations_23.html

@@ -41,11 +41,13 @@ def createJdbcProvider(param):
 
 
 def createVariable(param):
-  variables = AdminConfig.list("VariableSubstitutionEntry", node).split(separator)
+  variables = AdminConfig.list('VariableSubstitutionEntry', node).split(separator)
   for variable in variables:
-    if param['name'] == showAttribute(variable, "symbolicName"):
+    if param['name'] == showAttribute(variable, 'symbolicName'):
       AdminConfig.modify(variable, [['value', param['value']]])
       return
+  map = AdminConfig.getid("/Node:%s/VariableMap:/" % nodeName)
+  AdminConfig.create('VariableSubstitutionEntry', map, [['symbolicName', param['name']], ['value', param['value']]])
 
 
 print dict['node']['name']

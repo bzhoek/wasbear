@@ -30,7 +30,8 @@
         "resource": {
           "reference": "jdbc/ics/userdataDB",
           "type": "javax.sql.DataSource",
-          "jndiName": "jdbc/ics/userdataDB"
+          "jndiName": "jdbc/ics/userdataDB",
+          "j2c": "'precise64Node01/db2inst1'"
         }
       }
     },

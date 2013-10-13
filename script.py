@@ -76,7 +76,7 @@ def createCredential(param):
 def installApplication(param):
   virtualHost = [['.*', '.*', param['host']]]
   resource = param['resource']
-  dataSource = [['.*', '', '.*', resource['reference'], resource['type'], resource['jndiName'], '', '', '']]
+  dataSource = [['.*', '', '.*', resource['reference'], resource['type'], resource['jndiName'], resource['j2c'], '']]
   AdminApp.install(param['ear'], ['-MapResRefToEJB', dataSource, '-MapWebModToVH', virtualHost])
 
 

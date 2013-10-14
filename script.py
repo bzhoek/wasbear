@@ -27,7 +27,9 @@ def createDataSource(param, provider):
   dataSourceName = param['name']
   dataSource = AdminConfig.getid("/Node:%s/JDBCProvider:%s/DataSource:%s" % (nodeName, providerName, dataSourceName ))
   mapping = ['mapping', [['authDataAlias', param['j2c']], ['mappingConfigAlias', param['mapping']]]]
-  attrs = [['name', dataSourceName], ['jndiName', param['jndiName']], mapping]
+  attrs = [['name', dataSourceName], ['jndiName', param['jndiName']], ['relationalResourceAdapter',
+    findResourceAdapter()], ['datasourceHelperClassname', 'com.ibm.websphere.rsadapter.DB2UniversalDataStoreHelper'],
+    ['authDataAlias', param['j2c']], mapping]
   dataSource = AdminConfig.create('DataSource', provider, attrs)
   propertySet = AdminConfig.create('J2EEResourcePropertySet', dataSource, [])
   AdminConfig.create('J2EEResourceProperty', propertySet, [['name', 'driverType'], ['type', 'java.lang.Integer'],
@@ -47,7 +49,8 @@ def createJdbcProvider(param):
   attrs = [['name', param['name']],
     ['classpath', param['classpath']],
     ['implementationClassName', param['implementationClassName']],
-    ['description', param['description']]]
+    ['description', param['description']],
+    ['providerType', 'DB2 Universal JDBC Driver Provider']]
 
   provider = AdminConfig.create('JDBCProvider', node, attrs)
   createDataSource(param['dataSource'], provider)
@@ -78,6 +81,12 @@ def installApplication(param):
   resource = param['resource']
   dataSource = [['.*', '', '.*', resource['reference'], resource['type'], resource['jndiName'], resource['j2c'], '']]
   AdminApp.install(param['ear'], ['-MapResRefToEJB', dataSource, '-MapWebModToVH', virtualHost])
+
+
+def findResourceAdapter():
+  for adapter in AdminConfig.list('J2CResourceAdapter', node).split(separator):
+    if "WebSphere Relational Resource Adapter" == showAttribute(adapter, 'name'):
+      return adapter
 
 
 print dict['node']['name']

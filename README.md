@@ -13,7 +13,13 @@ Show required attributes with `print AdminConfig.required('ResourceEnvironmentPr
 
 AdminApp.install('/vagrant/iwa-usermanagement-server-ear-13.4.0.1-SNAPSHOT.ear')
 
+If you have a working manual configuration, you can inspect the configuration objec to ensure you have all the
+necessary attributes with
+
+    print AdminConfig.showall(AdminConfig.getid('/DataSource:userDataSource/'))
+
 # links
 
+http://wdr.github.io/WDR/
 http://www.programmingforliving.com/2013/04/was85-application-deployment-using.html
 http://mattdowell.blogspot.nl/2008/06/scripting-websphere-61-configurations_23.html

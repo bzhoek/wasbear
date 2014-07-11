@@ -1,4 +1,7 @@
-import json
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 json_data = open('config.json')
 data = json.load(json_data)

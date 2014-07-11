@@ -21,6 +21,18 @@ def showAttribute(object, name):
   return AdminConfig.showAttribute(object, name)
 
 
+def createJavaProcessDefinition(server, param):
+  jpd = AdminConfig.list('JavaProcessDef', server)
+  for key in param.keys():
+    AdminConfig.modify(jpd, [[key, param[key]]])
+
+
+def createJavaVirtualMachine(server, param):
+  jpd = AdminConfig.list('JavaVirtualMachine', server)
+  for key in param.keys():
+    AdminConfig.modify(jpd, [[key, param[key]]])
+
+
 def createServer(param):
   serverName = param['name']
   serverId = AdminConfig.getid("/Server:%s" % serverName)
@@ -29,7 +41,13 @@ def createServer(param):
     AdminConfig.remove(serverId)
 
   printCreateName('server', param)
-  server = AdminConfig.create('Server', node, [['name', serverName], ['outputStreamRedirect']])
+  server = AdminConfig.create('Server', node, [['name', serverName]])
+
+  if 'process' in param.keys():
+    createJavaProcessDefinition(server, param['process'])
+
+  if 'java' in param.keys():
+    createJavaVirtualMachine(server, param['java'])
 
 
 def createDataSource(param, provider):

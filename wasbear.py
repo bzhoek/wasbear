@@ -5,9 +5,15 @@ dict = eval(dict_data)
 separator = java.lang.System.getProperty("line.separator")
 nodeName = dict['node']['name']
 node = AdminConfig.getid('/Node:%s/' % nodeName)
+if not node:
+  raise Exception("WebSphere node '%s' not found" % nodeName)
 
 
-def printTypeName(type, param):
+def printDeleteName(type, param):
+  print "Deleting %s: %s" % (type, param['name'])
+
+
+def printCreateName(type, param):
   print "Creating %s: %s" % (type, param['name'])
 
 
@@ -16,13 +22,18 @@ def showAttribute(object, name):
 
 
 def createServer(param):
-  printTypeName('server', param)
-  serverName = param['node']['server']['name']
-  server = AdminConfig.create('Server', node, [['name', serverName]])
+  serverName = param['name']
+  serverId = AdminConfig.getid("/Server:%s" % serverName)
+  if serverId:
+    printDeleteName('server', param)
+    AdminConfig.remove(serverId)
+
+  printCreateName('server', param)
+  server = AdminConfig.create('Server', node, [['name', serverName], ['outputStreamRedirect']])
 
 
 def createDataSource(param, provider):
-  printTypeName('data source', param)
+  printCreateName('data source', param)
   providerName = showAttribute(provider, 'name')
   dataSourceName = param['name']
   dataSource = AdminConfig.getid("/Node:%s/JDBCProvider:%s/DataSource:%s" % (nodeName, providerName, dataSourceName ))
@@ -43,7 +54,7 @@ def createDataSource(param, provider):
 
 
 def createJdbcProvider(param):
-  printTypeName('JDBC provider', param)
+  printCreateName('JDBC provider', param)
   providerName = param['name']
   provider = AdminConfig.getid("/Node:%s/JDBCProvider/%s" % (nodeName, providerName))
   attrs = [['name', param['name']],
@@ -57,7 +68,7 @@ def createJdbcProvider(param):
 
 
 def createVariable(param):
-  printTypeName('variable', param)
+  printCreateName('variable', param)
   variables = AdminConfig.list('VariableSubstitutionEntry', node).split(separator)
   for variable in variables:
     if param['name'] == showAttribute(variable, 'symbolicName'):
@@ -68,7 +79,7 @@ def createVariable(param):
 
 
 def createCredential(param):
-  printTypeName('credentials', param)
+  printCreateName('credentials', param)
   security = AdminConfig.getid("/Cell:%sCell/Security:/" % nodeName)
   authAlias = "%s/%s" % (nodeName, param['name'])
   AdminConfig.create('JAASAuthData', security, [['alias', authAlias], ['userId', param['username']], ['password',
@@ -89,9 +100,10 @@ def findResourceAdapter():
       return adapter
 
 
-print dict['node']['name']
+if 'server' in dict['node'].keys():
+  createServer(dict['node']['server'])
 
-installApplication(dict['node']['server']['application'])
+# installApplication(dict['node']['server']['application'])
 # createCredential(dict['node']['j2c'])
 # createVariable(dict['node']['variable'])
 # createJdbcProvider(dict['node']['jdbc'])

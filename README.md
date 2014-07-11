@@ -10,12 +10,15 @@ Centos 5.5 has a version of Python that doesn't come with JSON support.
 wsadmin uses [Jython 2.1](http://pic.dhe.ibm.com/infocenter/wasinfo/v6r1/index.jsp?topic=%2Fcom.ibm.websphere.express
 .doc%2Finfo%2Fexp%2Fae%2Fcxml_jython.html), from 2002.
 
-    $ python config.py
-    $ wsadmin.sh -user wasadmin -password p@ssw0rd -lang jython -f /wasbear/wasbear.py /wasbear/config.dict
+    $ python config.py server.json server.dict; wsadmin.sh -user wasadmin -password p@ssw0rd -lang jython -f /wasbear/wasbear.py /wasbear/server.dict
 
 Show required attributes with `print AdminConfig.required('ResourceEnvironmentProvider')`.
 
 # wsadmin
+
+    $ rlwrap wsadmin.sh -user wasadmin -password p@ssw0rd -lang jython
+    > print AdminConfig.help()
+    > print AdminConfig.help('remove')
 
 `print AdminApp.taskInfo('/vagrant/ics-ear-13.4.0-SNAPSHOT-nl.ear', 'MapResEnvRefToRes')`
 

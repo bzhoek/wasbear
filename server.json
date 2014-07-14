@@ -1,14 +1,25 @@
 {
   "node": {
     "name": "server2Node01",
-    "server": {
-      "name": "server2",
-      "process": {
-        "workingDirectory": "/data/server4"
+    "server": [
+      {
+        "name": "server2",
+        "process": {
+          "workingDirectory": "/data/server2"
+        },
+        "java": {
+          "maximumHeapSize": "128"
+        }
       },
-      "java": {
-        "maximumHeapSize": "128"
+      {
+        "name": "server3",
+        "process": {
+          "workingDirectory": "/data/server3"
+        },
+        "java": {
+          "maximumHeapSize": "128"
+        }
       }
-    }
+    ]
   }
 }

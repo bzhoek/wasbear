@@ -1,20 +1,26 @@
-print "Processing %s" % sys.argv[0]
-dict_data = open(sys.argv[0]).read()
-dict = eval(dict_data)
+from com.google.gson import JsonParser
+from java.io import FileReader
 
 separator = java.lang.System.getProperty("line.separator")
-nodeName = dict['node']['name']
+
+parser = JsonParser()
+infile = (len(sys.argv) == 1) and sys.argv[0] or "config.json"
+print "Processing ** '%s' **" % infile
+
+reader = FileReader(infile)
+json = parser.parse(reader)
+nodeName = json.get('node').get('name')
 node = AdminConfig.getid('/Node:%s/' % nodeName)
 if not node:
   raise Exception("WebSphere node '%s' not found" % nodeName)
 
 
 def printDeleteName(type, param):
-  print "Deleting %s: %s" % (type, param['name'])
+  print "Deleting %s: %s" % (type, param.get('name'))
 
 
 def printCreateName(type, param):
-  print "Creating %s: %s" % (type, param['name'])
+  print "Creating %s: %s" % (type, param.get('name'))
 
 
 def showAttribute(object, name):
@@ -23,18 +29,18 @@ def showAttribute(object, name):
 
 def createJavaProcessDefinition(server, param):
   jpd = AdminConfig.list('JavaProcessDef', server)
-  for key in param.keys():
-    AdminConfig.modify(jpd, [[key, param[key]]])
+  for pair in param.entrySet().toArray():
+    AdminConfig.modify(jpd, [[pair.getKey(), pair.getValue()]])
 
 
 def createJavaVirtualMachine(server, param):
   jpd = AdminConfig.list('JavaVirtualMachine', server)
-  for key in param.keys():
-    AdminConfig.modify(jpd, [[key, param[key]]])
+  for pair in param.entrySet().toArray():
+    AdminConfig.modify(jpd, [[pair.getKey(), pair.getValue()]])
 
 
 def createServer(param):
-  serverName = param['name']
+  serverName = param.get('name')
   serverId = AdminConfig.getid("/Server:%s" % serverName)
   if serverId:
     printDeleteName('server', param)
@@ -43,11 +49,11 @@ def createServer(param):
   printCreateName('server', param)
   server = AdminConfig.create('Server', node, [['name', serverName]])
 
-  if 'process' in param.keys():
-    createJavaProcessDefinition(server, param['process'])
+  if param.get('process'):
+    createJavaProcessDefinition(server, param.get('process'))
 
-  if 'java' in param.keys():
-    createJavaVirtualMachine(server, param['java'])
+  if param.get('java'):
+    createJavaVirtualMachine(server, param.get('java'))
 
 
 def createDataSource(param, provider):
@@ -118,12 +124,19 @@ def findResourceAdapter():
       return adapter
 
 
-if 'server' in dict['node'].keys():
-  createServer(dict['node']['server'])
+def asList(node):
+  if node.isJsonArray():
+    return [node.get(i) for i in range(0, node.size())]
+  else:
+    return [node]
+
+
+[createServer(server) for server in asList(json.get('node').get('server'))]
+AdminConfig.save()
 
 # installApplication(dict['node']['server']['application'])
 # createCredential(dict['node']['j2c'])
 # createVariable(dict['node']['variable'])
 # createJdbcProvider(dict['node']['jdbc'])
 
-AdminConfig.save()
+

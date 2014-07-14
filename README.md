@@ -29,8 +29,22 @@ necessary attributes with
 
     print AdminConfig.showall(AdminConfig.getid('/DataSource:userDataSource/'))
 
+## wsadmin JSON
+
+http://www-01.ibm.com/support/knowledgecenter/?lang=en#!/SSAW57_7.0.0/com.ibm.websphere.nd.multiplatform.doc/info/ae/ae/rxml_commandline.html?cp=SSAW57_7.0.0%2F3-16-1-96
+
 # links
 
 http://wdr.github.io/WDR/
 http://www.programmingforliving.com/2013/04/was85-application-deployment-using.html
 http://mattdowell.blogspot.nl/2008/06/scripting-websphere-61-configurations_23.html
+
+# Jython
+http://www.jython.org/archive/21/
+http://myarch.com/using-jython-221-with-wsadmin-tool/
+
+# Java
+http://www.jython.org/jythonbook/en/1.0/JythonAndJavaIntegration.html
+
+from java.lang import System
+System.getProperty("java.version")

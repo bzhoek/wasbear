@@ -1,28 +1,19 @@
-# Python 2.4
-
-Centos 5.5 has a version of Python that doesn't come with JSON support.
-
-    $ yum install python-pip
-    $ easy_install https://pypi.python.org/packages/2.4/s/simplejson/simplejson-1.7-py2.4.egg
-  
 # wasbear
 
 wsadmin uses [Jython 2.1](http://pic.dhe.ibm.com/infocenter/wasinfo/v6r1/index.jsp?topic=%2Fcom.ibm.websphere.express
 .doc%2Finfo%2Fexp%2Fae%2Fcxml_jython.html), from 2002.
 
-    $ python config.py server.json server.dict; wsadmin.sh -user wasadmin -password p@ssw0rd -lang jython -f /wasbear/wasbear.py /wasbear/server.dict
+    $ wsadmin.sh -user wasadmin -password p@ssw0rd -lang jython -wsadmin_classpath ./gson-2.2.4.jar -f /wasbear/wasbear.py /wasbear/server.json
 
 Show required attributes with `print AdminConfig.required('ResourceEnvironmentProvider')`.
 
 # wsadmin
 
-    $ rlwrap wsadmin.sh -user wasadmin -password p@ssw0rd -lang jython
+    $ rlwrap wsadmin.sh -user wasadmin -password p@ssw0rd -lang jython -wsadmin_classpath ./gson-2.2.4.jar
     > print AdminConfig.help()
     > print AdminConfig.help('remove')
-
-`print AdminApp.taskInfo('/vagrant/ics-ear-13.4.0-SNAPSHOT-nl.ear', 'MapResEnvRefToRes')`
-
-AdminApp.install('/vagrant/iwa-usermanagement-server-ear-13.4.0.1-SNAPSHOT.ear')
+    > print AdminApp.taskInfo('/vagrant/some.ear', 'MapResEnvRefToRes')
+    > AdminApp.install('/vagrant/some.ear')
 
 If you have a working manual configuration, you can inspect the configuration objec to ensure you have all the
 necessary attributes with
@@ -31,7 +22,8 @@ necessary attributes with
 
 ## wsadmin JSON
 
-http://www-01.ibm.com/support/knowledgecenter/?lang=en#!/SSAW57_7.0.0/com.ibm.websphere.nd.multiplatform.doc/info/ae/ae/rxml_commandline.html?cp=SSAW57_7.0.0%2F3-16-1-96
+Use the -wsadmin_classpath [command-line argument](http://www-01.ibm.com/support/knowledgecenter/?lang=en#!/SSAW57_7.0.0/com.ibm.websphere.nd.multiplatform.doc/info/ae/ae/rxml_commandline.html?cp=SSAW57_7.0.0%2F3-16-1-96)
+to include `gson-2.2.4.jar`
 
 # links
 

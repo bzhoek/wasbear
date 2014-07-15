@@ -18,6 +18,10 @@
         },
         "java": {
           "maximumHeapSize": "128"
+        },
+        "war": {
+          "name": "ecommerce-ahws",
+          "file": "/wasbear/ecommerce-ahws.war"
         }
       }
     ]

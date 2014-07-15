@@ -15,6 +15,10 @@ if not node:
   raise Exception("WebSphere node '%s' not found" % nodeName)
 
 
+def hasAppName(appName):
+  return len(AdminConfig.getid("/Deployment:" + appName + "/")) > 0
+
+
 def printDeleteName(type, param):
   print "Deleting %s: %s" % (type, param.get('name'))
 
@@ -39,6 +43,19 @@ def createServer(param):
     for pair in param.entrySet().toArray():
       AdminConfig.modify(jpd, [[pair.getKey(), pair.getValue()]])
 
+  def installWebArchive(serverName, param):
+    appname = param.get('name').getAsString()
+    file = param.get('file').getAsString()
+    print "server %s file %s" % (serverName, file)
+
+    if hasAppName(appname):
+      print "Uninstalling %s" % appname
+      AdminApp.uninstall(appname)
+
+    AdminApp.install(file,
+      ['-reloadInterval ', '11', '-reloadEnabled', 'true', '-appname', appname, '-MapWebModToVH',
+        [['.*', '.*', 'default_host']]])
+
 
   serverName = param.get('name')
   serverId = AdminConfig.getid("/Server:%s" % serverName)
@@ -54,6 +71,9 @@ def createServer(param):
 
   if param.get('java'):
     createJavaVirtualMachine(server, param.get('java'))
+
+  if param.get('war'):
+    installWebArchive(serverName, param.get('war'))
 
 
 def createDataSource(param, provider):
@@ -132,6 +152,7 @@ def asList(node):
 
 
 [createServer(server) for server in asList(json.get('node').get('server'))]
+
 AdminConfig.save()
 
 # installApplication(dict['node']['server']['application'])

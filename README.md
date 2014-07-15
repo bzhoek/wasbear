@@ -25,6 +25,18 @@ necessary attributes with
 Use the -wsadmin_classpath [command-line argument](http://www-01.ibm.com/support/knowledgecenter/?lang=en#!/SSAW57_7.0.0/com.ibm.websphere.nd.multiplatform.doc/info/ae/ae/rxml_commandline.html?cp=SSAW57_7.0.0%2F3-16-1-96)
 to include `gson-2.2.4.jar`
 
+## wsadmin Install WAR
+
+http://www-01.ibm.com/support/docview.wss?uid=swg21199311
+http://www.programmingforliving.com/2013/04/was85-application-deployment-using.html
+
+    > AdminApp.install('/wasbear/ecommerce-ahws.war', ['-MapWebModToVH', [['.*', '.*', 'default_host']]])
+
+Genereert zelf een naam, beter is de `-appname` parameter mee te geven.
+
+    > AdminApp.install('/wasbear/ecommerce-ahws.war', ['-reloadInterval ', '11', '-reloadEnabled', 'true', '-appname', 'ecommerce-ahws', '-MapWebModToVH', [['.*', '.*', 'default_host']]])
+    > AdminConfig.save()
+
 # links
 
 http://wdr.github.io/WDR/
@@ -40,3 +52,12 @@ http://www.jython.org/jythonbook/en/1.0/JythonAndJavaIntegration.html
 
 from java.lang import System
 System.getProperty("java.version")
+
+# WebSphere
+
+    ps axuww
+    /opt/ibm/websphere/appserver/java/bin/java ... com.ibm.ws.runtime.WsServer /opt/ibm/websphere/appserver/profiles/AppSrv01/config server2Node01Cell server2Node01 server1
+
+## Heap
+
+Default heap is 50M initial, 256M maximum http://www.ibm.com/developerworks/websphere/techjournal/0909_blythe/0909_blythe.html

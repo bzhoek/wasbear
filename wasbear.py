@@ -27,19 +27,19 @@ def showAttribute(object, name):
   return AdminConfig.showAttribute(object, name)
 
 
-def createJavaProcessDefinition(server, param):
-  jpd = AdminConfig.list('JavaProcessDef', server)
-  for pair in param.entrySet().toArray():
-    AdminConfig.modify(jpd, [[pair.getKey(), pair.getValue()]])
-
-
-def createJavaVirtualMachine(server, param):
-  jpd = AdminConfig.list('JavaVirtualMachine', server)
-  for pair in param.entrySet().toArray():
-    AdminConfig.modify(jpd, [[pair.getKey(), pair.getValue()]])
-
-
 def createServer(param):
+  def createJavaProcessDefinition(server, param):
+    jpd = AdminConfig.list('JavaProcessDef', server)
+    for pair in param.entrySet().toArray():
+      AdminConfig.modify(jpd, [[pair.getKey(), pair.getValue()]])
+
+
+  def createJavaVirtualMachine(server, param):
+    jpd = AdminConfig.list('JavaVirtualMachine', server)
+    for pair in param.entrySet().toArray():
+      AdminConfig.modify(jpd, [[pair.getKey(), pair.getValue()]])
+
+
   serverName = param.get('name')
   serverId = AdminConfig.getid("/Server:%s" % serverName)
   if serverId:

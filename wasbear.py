@@ -33,38 +33,47 @@ def showAttribute(object, name):
 
 def createServer(param):
   def createJavaProcessDefinition(server, param):
-    jpd = AdminConfig.list('JavaProcessDef', server)
+    config = AdminConfig.list('JavaProcessDef', server)
     for pair in param.entrySet().toArray():
-      AdminConfig.modify(jpd, [[pair.getKey(), pair.getValue()]])
+      AdminConfig.modify(config, [[pair.getKey(), pair.getValue()]])
 
 
   def createJavaVirtualMachine(server, param):
-    jpd = AdminConfig.list('JavaVirtualMachine', server)
+    config = AdminConfig.list('JavaVirtualMachine', server)
     for pair in param.entrySet().toArray():
-      AdminConfig.modify(jpd, [[pair.getKey(), pair.getValue()]])
+      AdminConfig.modify(config, [[pair.getKey(), pair.getValue()]])
+
+  def createJavaVirtualMachineArguments(server, param):
+    config = AdminConfig.list('JavaVirtualMachine', server)
+    arguments = []
+    for pair in param.entrySet().toArray():
+      arguments.append("-D%s=%s" % (pair.getKey(), pair.getValue()))
+    AdminConfig.modify(config, [["genericJvmArguments", " ".join(arguments)]])
 
   def installWebArchive(serverName, param):
     appname = param.get('name').getAsString()
-    file = param.get('file').getAsString()
-    print "server %s file %s" % (serverName, file)
-
     if hasAppName(appname):
       print "Uninstalling %s" % appname
       AdminApp.uninstall(appname)
 
+    file = param.get('file').getAsString()
+    print "Installing file %s as %s" % (file, serverName)
     AdminApp.install(file,
       ['-reloadInterval ', '11', '-reloadEnabled', 'true', '-appname', appname, '-MapWebModToVH',
         [['.*', '.*', 'default_host']]])
 
 
-  serverName = param.get('name')
-  serverId = AdminConfig.getid("/Server:%s" % serverName)
-  if serverId:
+  servername = param.get('name')
+  serverid = AdminConfig.getid("/Server:%s" % servername)
+  if serverid:
     printDeleteName('server', param)
-    AdminConfig.remove(serverId)
+    AdminConfig.remove(serverid)
+
+  if param.get('ensure') and param.get('ensure').getAsString() == "absent":
+    return
 
   printCreateName('server', param)
-  server = AdminConfig.create('Server', node, [['name', serverName]])
+  server = AdminConfig.create('Server', node, [['name', servername]])
 
   if param.get('process'):
     createJavaProcessDefinition(server, param.get('process'))
@@ -72,8 +81,11 @@ def createServer(param):
   if param.get('java'):
     createJavaVirtualMachine(server, param.get('java'))
 
+  if param.get('arguments'):
+    createJavaVirtualMachineArguments(server, param.get('arguments'))
+
   if param.get('war'):
-    installWebArchive(serverName, param.get('war'))
+    installWebArchive(servername, param.get('war'))
 
 
 def createDataSource(param, provider):

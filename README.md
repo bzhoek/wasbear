@@ -37,6 +37,9 @@ Genereert zelf een naam, beter is de `-appname` parameter mee te geven.
     > AdminApp.install('/wasbear/ecommerce-ahws.war', ['-reloadInterval ', '11', '-reloadEnabled', 'true', '-appname', 'ecommerce-ahws', '-MapWebModToVH', [['.*', '.*', 'default_host']]])
     > AdminConfig.save()
 
+## wsadmin Documentation
+http://www-01.ibm.com/support/knowledgecenter/?lang=en#!/SSEQTP_7.0.0/com.ibm.websphere.base.doc/info/aes/ae/rxml_adminapp.html
+
 # links
 
 http://wdr.github.io/WDR/

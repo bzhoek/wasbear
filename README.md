@@ -3,9 +3,7 @@
 wsadmin uses [Jython 2.1](http://pic.dhe.ibm.com/infocenter/wasinfo/v6r1/index.jsp?topic=%2Fcom.ibm.websphere.express
 .doc%2Finfo%2Fexp%2Fae%2Fcxml_jython.html), from 2002.
 
-    $ wsadmin.sh -user wasadmin -password p@ssw0rd -lang jython -wsadmin_classpath ./gson-2.2.4.jar -f /wasbear/wasbear.py /wasbear/server.json
-
-Show required attributes with `print AdminConfig.required('ResourceEnvironmentProvider')`.
+    $ wsadmin.sh -user wasadmin -password p@ssw0rd -lang jython -wsadmin_classpath /wasbear/gson-2.2.4.jar -f /wasbear/wasbear.py /wasbear/server.json
 
 # wsadmin
 
@@ -15,10 +13,18 @@ Show required attributes with `print AdminConfig.required('ResourceEnvironmentPr
     > print AdminApp.taskInfo('/vagrant/some.ear', 'MapResEnvRefToRes')
     > AdminApp.install('/vagrant/some.ear')
 
-If you have a working manual configuration, you can inspect the configuration objec to ensure you have all the
+If you have a working manual configuration, you can inspect the configuration object to ensure you have all the
 necessary attributes with
 
     print AdminConfig.showall(AdminConfig.getid('/DataSource:userDataSource/'))
+
+Show required attributes with `print AdminConfig.required('ResourceEnvironmentProvider')`.
+
+    print AdminConfig.showall(AdminConfig.list("JavaVirtualMachine", server))
+
+    | process | JavaProcessDef     |
+    | java    | JavaVirtualMachine |
+
 
 ## wsadmin JSON
 

@@ -1,4 +1,6 @@
+from com.google.gson import JsonObject
 from com.google.gson import JsonParser
+from com.google.gson import JsonPrimitive
 from java.io import FileReader
 
 separator = java.lang.System.getProperty("line.separator")
@@ -31,11 +33,20 @@ def showAttribute(object, name):
   return AdminConfig.showAttribute(object, name)
 
 
+def listify(value):
+  if value.class == JsonObject:
+    list = []
+    [list.append([pair.getKey(), pair.getValue()]) for pair in value.entrySet().toArray()]
+    return list
+  else:
+    return value
+
+
 def createServer(param):
   def createJavaProcessDefinition(server, param):
     config = AdminConfig.list('JavaProcessDef', server)
     for pair in param.entrySet().toArray():
-      AdminConfig.modify(config, [[pair.getKey(), pair.getValue()]])
+      AdminConfig.modify(config, [[pair.getKey(), listify(pair.getValue())]])
 
 
   def createJavaVirtualMachine(server, param):

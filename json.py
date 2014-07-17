@@ -4,12 +4,13 @@ from java.lang import System
 print System.getProperty("java.version")
 
 # JsonParser
+from com.google.gson import JsonPrimitive
 from com.google.gson import JsonParser
 parser = JsonParser()
 
 # read from file
 from java.io import FileReader
-reader = FileReader("server.json")
+reader = FileReader("/wasbear/server2.json")
 json = parser.parse(reader)
 json.get('node').isJsonArray()
 

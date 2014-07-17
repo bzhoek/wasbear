@@ -33,26 +33,26 @@ def showAttribute(object, name):
   return AdminConfig.showAttribute(object, name)
 
 
-def listify(value):
-  if value.class == JsonObject:
+def listify(object):
+  if object.getValue().class == JsonObject:
     list = []
-    [list.append([pair.getKey(), pair.getValue()]) for pair in value.entrySet().toArray()]
-    return list
+    [list.append(listify(pair)) for pair in object.getValue().entrySet().toArray()]
+    return [object.getKey(), list]
   else:
-    return value
+    return [object.getKey(), object.getValue()]
 
 
 def createServer(param):
   def createJavaProcessDefinition(server, param):
     config = AdminConfig.list('JavaProcessDef', server)
     for pair in param.entrySet().toArray():
-      AdminConfig.modify(config, [[pair.getKey(), listify(pair.getValue())]])
+      AdminConfig.modify(config, [listify(pair)])
 
 
   def createJavaVirtualMachine(server, param):
     config = AdminConfig.list('JavaVirtualMachine', server)
     for pair in param.entrySet().toArray():
-      AdminConfig.modify(config, [[pair.getKey(), pair.getValue()]])
+      AdminConfig.modify(config, [listify(pair)])
 
   def createJavaVirtualMachineArguments(server, param):
     config = AdminConfig.list('JavaVirtualMachine', server)

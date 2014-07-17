@@ -1,0 +1,36 @@
+{
+  "node": {
+    "name": "server2Node01",
+    "server": [
+      {
+        "name": "server2",
+        "process": {
+          "workingDirectory": "/data/server2",
+          "ioRedirect": {
+            "stderrFilename": "/data/server2/stderr.log",
+            "stdoutFilename": "/data/server2/stdout.log"
+          }
+        },
+        "java": {
+          "maximumHeapSize": "128"
+        },
+        "arguments": {
+          "javax.management.builder.initial": "",
+          "com.sun.management.jmxremote": "",
+          "com.sun.management.jmxremote.port": "19092",
+          "com.sun.management.jmxremote.authenticate": "true",
+          "com.sun.management.jmxremote.ssl": "false",
+          "ecommerce.host": "denise_9092",
+          "ecommerce.environment": "tst",
+          "ecommerce.country": "nl",
+          "override.resources": "classpath:configuration-test.properties",
+          "log4j.configuration": "log4j-test.properties"
+        }
+      },
+      {
+        "name": "server3",
+        "ensure": "absent"
+      }
+    ]
+  }
+}
